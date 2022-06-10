@@ -14,6 +14,7 @@ module.exports ={
     plugins: [],
     output: {
         filename: "[name].js",
-        path: path.join(__dirname,'dist')// 최종 빌드시 해당 폴더에 결과물이 나오라ㅏ(app.js)
+        path: path.join(__dirname,'dist')// 최종 빌드시 해당 폴더에 결과물이 나오라ㅏ(app.js)m
+        publicPath: "/dist"
     }
 };

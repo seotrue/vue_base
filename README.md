@@ -184,3 +184,136 @@ Vue.set(접근할 배열, 인덱스, '넣구 싶은 값)
 // 방법 2: 
 this.$set(접근할 배열, 인덱스, '넣구 싶은 값)
 ```
+
+### event bus
+- 이벤트를 중앙에서 통제
+- 이벤트의 중앙 매개체
+```vue
+import Vue from 'vue'
+// 깡통 뷰를 하나 만듬
+export default new Vue()
+
+```
+
+```vue
+// 다른 컴포넌트에서  불러오고 등럭해줌
+created(){
+// 최상위에 이벤트 등록
+EventBus.$on('이벤트 이름정의', 메소드에 등록한 함수 )
+```
+
+- ```emit``` 과 ```on```은 대응된다
+
+## vuex
+- 데이터 중앙 통제 관리실
+- 리액트는 리덕스 뷰는 vuex
+- 뷰엑스는 스토어를 여러개 만들어두 됨
+- 폴더 vuex 에 정리
+
+ > npm i vuex
+
+```vue
+
+ state:{
+        winner: ''
+    }, // vue의 data 와 비슷
+    getters: {
+        // state의 추가적인 작업을 할때 사용 => 캐싱 되기 때문에
+    }, // vue의 computed와 비슷
+    mutations:{
+        // 대문자로 지어야함,state를 바뀌고 싶을때 사용
+        [SET_WINNER](state, winner) {
+            state.winner = winner
+        }  ,
+        [SET_WINNER](state, winner) {
+            state.winner = winner;
+        },
+        [CLICK_CELL](state, { row, cell }) {
+            // vuex 에서도 인덱스로 접근해서 변경할 경우 화면이 안바뀌므로 vue.set사용
+            Vue.set(state.tableData[row], cell, state.turn);
+        },
+        [CHANGE_TURN](state) {
+            state.turn = state.turn === 'O' ? 'X' : 'O';
+        },
+        [RESET_GAME](state) {
+            state.turn = 'O';
+            state.tableData = [
+                ['', '', ''],
+                ['', '', ''],
+                ['', '', ''],
+            ];
+        },
+        [NO_WINNER](state) {
+            state.winner = '';
+        }
+    }, // state를 수정할때 사용 동기적으로
+
+    actions: {
+    
+    }// 비동기 사용할때, 또는 여러 뮤테이션을 연달아 실핼할때
+```
+
+```vue
+// 다른 컴포넌트에서 mutations에 접근할려면
+this.$store.commit('CLICK_CELL)
+```
+
+- mutations 접근 시 this.$store.commit('mutatins 이름')
+// 첫번째 인수는 뮤테이션 이름, 두번째인수는 데이터!! 전달 
+- this.$store.commit('mutatins 이름', 인수로 넘겨줄 데이터도 넣을수 잇음 두번째 인수에)
+
+- vuex의 state를 쓸려면 반드시 computed 에다 연결을 해줘야함
+```vue
+computed: {
+    tableData() {
+        // 스토어에서 데이터를 가져옴 
+        return this.$store.state.tableDate
+    }
+}
+```
+
+- 뷰와 뷰엑스 연결
+Vue.use(Vuex)
+
+- 스토어와 최상의 컴포넌트 연결 스크립트 단에 
+    store, 
+    
+    
+### mapState
+- 스토어의 state를 가져와서 쓸때 컴포넌트 마다 computed 마다 쓰기 구찮으니
+```vue
+import { mapState } from 'vuex
+computed: {
+    ...mapState(['스토어에서 가져올 state 명])
+  // or
+    ...mapSate({
+       winner: state => state.winner
+       })
+}
+```
+
+### slot
+- 프랍스로 자식컴포넌트로 넘기는 방법 외에 다른 방법이 잇다
+- <컴퍼넌트태그>사이에 전달할 내용을 넣는다</컴퍼넌트태그>
+```vue
+// 1번.js
+<부모>
+<tr v-for="(value, idx) in 데이터">
+<td @click="">
+</tr>
+</부모>
+```
+
+```vue
+// 부모.js
+<table>
+    //slot 으로 받는다
+    <slot/>
+</table>
+```
+- slot을 여러개 사용도 가능
+- slot 사이에 기본값 넣을수도 잇음 
+- 리액트 칠드런 역활
+
+### 라우터
+- ```this.$router```, ```this.$route```
